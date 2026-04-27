@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Workout App</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --card: #141414;
+  --card2: #1a1a1a;
+  --mon: #4ade80;
+  --wed: #60a5fa;
+  --fri: #fb923c;
+  --text: #f0f0f0;
+  --muted: #666;
+  --border: #222;
+  --accent: #4ade80;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── PLAN VIEW ── */
+#plan-view {
+  padding: 2rem 1rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-top: 1rem;
+}
+
+header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, #4ade80, #60a5fa, #fb923c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.day-card {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.day-header {
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.day-header-left { display: flex; align-items: center; gap: 0.8rem; }
+
+.day-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.day-sub {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  margin-top: 2px;
+}
+
+.dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mon .day-header { background: linear-gradient(135deg, #052e1630, #4ade8018); border-bottom: 2px solid var(--mon); }
+.mon .day-label { color: var(--mon); }
+.mon .dot { background: var(--mon); box-shadow: 0 0 8px var(--mon); }
+
+.wed .day-header { background: linear-gradient(135deg, #03122b30, #60a5fa18); border-bottom: 2px solid var(--wed); }
+.wed .day-label { color: var(--wed); }
+.wed .dot { background: var(--wed); box-shadow: 0 0 8px var(--wed); }
+
+.fri .day-header { background: linear-gradient(135deg, #2c0e0030, #fb923c18); border-bottom: 2px solid var(--fri); }
+.fri .day-label { color: var(--fri); }
+.fri .dot { background: var(--fri); box-shadow: 0 0 8px var(--fri); }
+
+.start-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.start-btn:hover { transform: scale(1.05); opacity: 0.9; }
+.mon .start-btn { background: var(--mon); color: #000; }
+.wed .start-btn { background: var(--wed); color: #000; }
+.fri .start-btn { background: var(--fri); color: #000; }
+
+.exercises { padding: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem; }
+
+.section-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  padding: 0.3rem 0.3rem 0;
+  font-weight: 600;
+}
+
+.ex-row {
+  background: var(--card2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ex-row-left { flex: 1; }
+.ex-row-name { font-weight: 600; font-size: 0.85rem; }
+.ex-row-meta { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+
+.expand-block {
+  background: var(--card2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.expand-header {
+  padding: 0.6rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.expand-header:hover { background: #202020; }
+.expand-title { font-weight: 600; font-size: 0.85rem; }
+.expand-arrow { font-size: 0.6rem; color: var(--muted); transition: transform 0.2s; }
+.expand-arrow.open { transform: rotate(180deg); }
+
+.expand-body {
+  display: none;
+  padding: 0 0.9rem 0.8rem;
+  border-top: 1px solid var(--border);
+}
+.expand-body.open { display: block; }
+
+.step-list { list-style: none; margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; }
+
+.step-list li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.78rem;
+  color: #bbb;
+  line-height: 1.4;
+}
+
+.step-num {
+  font-weight: 700;
+  font-size: 0.65rem;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mon .step-num { background: #052e16; color: var(--mon); }
+.wed .step-num { background: #03122b; color: var(--wed); }
+.fri .step-num { background: #2c0e00; color: var(--fri); }
+
+.step-detail strong { color: var(--text); font-weight: 600; }
+.step-detail span { color: var(--muted); font-size: 0.72rem; }
+
+.video-link-small {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+.mon .video-link-small { background: #052e16; color: var(--mon); border: 1px solid #4ade8040; }
+.wed .video-link-small { background: #03122b; color: var(--wed); border: 1px solid #60a5fa40; }
+.fri .video-link-small { background: #2c0e00; color: var(--fri); border: 1px solid #fb923c40; }
+
+.video-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.mon .video-btn { background: #052e16; color: var(--mon); border: 1px solid #4ade8040; }
+.wed .video-btn { background: #03122b; color: var(--wed); border: 1px solid #60a5fa40; }
+.fri .video-btn { background: #2c0e00; color: var(--fri); border: 1px solid #fb923c40; }
+
+.tip-box {
+  margin-top: 0.4rem;
+  background: #0d0d0d;
+  border-left: 3px solid;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.76rem;
+  color: #999;
+  line-height: 1.5;
+}
+.mon .tip-box { border-color: var(--mon); }
+.wed .tip-box { border-color: var(--wed); }
+.fri .tip-box { border-color: var(--fri); }
+.tip-box strong { color: var(--text); }
+
+/* ── WORKOUT VIEW ── */
+#workout-view {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.5rem 1rem 2rem;
+  position: relative;
+}
+
+.wv-topbar {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.wv-day-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+}
+
+.wv-progress-text {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.progress-bar-wrap {
+  width: 100%;
+  max-width: 500px;
+  height: 4px;
+  background: #1e1e1e;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Circle timer */
+.timer-circle-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin-bottom: 1.5rem;
+}
+
+.timer-svg {
+  width: 220px;
+  height: 220px;
+  transform: rotate(-90deg);
+}
+
+.timer-track {
+  fill: none;
+  stroke: #1e1e1e;
+  stroke-width: 10;
+}
+
+.timer-fill {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+
+.timer-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.timer-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 4.5rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.timer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Exercise info */
+.ex-info-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.ex-info-phase {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.ex-info-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.3rem;
+}
+
+.ex-info-detail {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.ex-info-sets {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.set-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #2a2a2a;
+  border: 1px solid #333;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.set-dot.done { border-color: transparent; }
+.set-dot.active { border-color: transparent; animation: pulse-dot 1s infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+/* Next up */
+.next-up-card {
+  width: 100%;
+  max-width: 500px;
+  background: #111;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.next-up-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.next-up-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ccc;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.btn-pause {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  border: none;
+  background: #1e1e1e;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.15s;
+  border: 1px solid #2a2a2a;
+}
+
+.btn-pause:hover { background: #272727; transform: scale(1.03); }
+
+.btn-skip {
+  padding: 14px 24px;
+  border-radius: 50px;
+  border: 1px solid #2a2a2a;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.btn-skip:hover { color: var(--text); border-color: #444; transform: scale(1.03); }
+
+.btn-stop {
+  padding: 14px 24px;
+  border-radius: 50px;
+  border: 1px solid #3a1a1a;
+  background: transparent;
+  color: #f87171;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-stop:hover { background: #1a0a0a; transform: scale(1.03); }
+
+/* Completion screen */
+#complete-view {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.complete-emoji { font-size: 4rem; margin-bottom: 1rem; animation: bounce 0.6s ease; }
+@keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+.complete-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.complete-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6; }
+
+.btn-back {
+  padding: 14px 36px;
+  border-radius: 50px;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.btn-back:hover { transform: scale(1.05); opacity: 0.9; }
+
+/* Paused overlay */
+#pause-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.pause-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: 0.05em;
+}
+
+.pause-sub { color: var(--muted); font-size: 0.9rem; }
+
+.btn-resume {
+  padding: 16px 44px;
+  border-radius: 50px;
+  border: none;
+  background: var(--accent);
+  color: #000;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.btn-resume:hover { transform: scale(1.05); }
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.72rem;
+  margin-top: 2rem;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     PLAN VIEW
+═══════════════════════════════════════════ -->
+<div id="plan-view">
+  <header>
+    <h1>Your Workout App</h1>
+    <p>Mon · Wed · Fri &nbsp;|&nbsp; Bodyweight &nbsp;|&nbsp; 40+ Friendly</p>
+  </header>
+
+  <div class="days-grid">
+
+    <!-- MONDAY -->
+    <div class="day-card mon" id="card-mon">
+      <div class="day-header">
+        <div class="day-header-left">
+          <div class="dot"></div>
+          <div>
+            <div class="day-label">Monday</div>
+            <div class="day-sub">Full Body Strength</div>
+          </div>
+        </div>
+        <button class="start-btn" onclick="startWorkout('mon')">▶ Start</button>
+      </div>
+      <div class="exercises">
+        <div class="section-label">🔥 Warm-Up — 5 min · via Bend</div>
+        <div class="expand-block">
+          <div class="expand-header" onclick="toggleExpand(this)">
+            <span class="expand-title">Bend Full Body Warm-Up</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="expand-body">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div class="step-detail"><strong>March in Place</strong> <span>— 30s · lift knees gently, get blood flowing first</span></div></li>
+              <li><span class="step-num">2</span><div class="step-detail"><strong>Jumping Jacks</strong> <span>— 30s · land softly on balls of feet, slight knee bend</span></div></li>
+              <li><span class="step-num">3</span><div class="step-detail"><strong>Air Squats</strong> <span>— 30s · feet shoulder-width, thighs parallel to floor</span></div></li>
+              <li><span class="step-num">4</span><div class="step-detail"><strong>Lateral Lunge</strong> <span>— 30s · feet wide, bend one knee and lower hips to that side</span></div></li>
+              <li><span class="step-num">5</span><div class="step-detail"><strong>Arm Circles</strong> <span>— 30s · arms out to sides, small to big circles, then reverse</span></div></li>
+              <li><span class="step-num">6</span><div class="step-detail"><strong>Arm Swings</strong> <span>— 30s · swing arms forward across chest then back out wide</span></div></li>
+              <li><span class="step-num">7</span><div class="step-detail"><strong>Trunk Twist</strong> <span>— 30s · arms out at shoulder height, twist side to side, hips forward</span></div></li>
+              <li><span class="step-num">8</span><div class="step-detail"><strong>Toe Touch Twist</strong> <span>— 30s · bend forward, touch opposite toe with opposite hand</span></div></li>
+              <li><span class="step-num">9</span><div class="step-detail"><strong>Knee Hugs</strong> <span>— 30s · lift one knee to chest, hug it in, alternate legs</span></div></li>
+              <li><span class="step-num">10</span><div class="step-detail"><strong>Leg Swings</strong> <span>— 30s · hold wall, swing leg forward and back, then switch</span></div></li>
+              <li><span class="step-num">11</span><div class="step-detail"><strong>Knee Circles</strong> <span>— 30s · hands on knees, small circles both directions</span></div></li>
+            </ul>
+            <a class="video-link-small" href="https://bend.com/routines/warm-up" target="_blank">▶ View on Bend</a>
+          </div>
+        </div>
+        <div class="section-label">💪 Main Work</div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Bodyweight Squats</div><div class="ex-row-meta">3 × 12 · 60s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=aclHkVaku9U" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Push-Ups</div><div class="ex-row-meta">3 × 10 · 60s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=IODxDxX7oi4" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Glute Bridges</div><div class="ex-row-meta">3 × 15 · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=wPM8icPu6H8" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Plank Hold</div><div class="ex-row-meta">3 × 30s · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Bird-Dog</div><div class="ex-row-meta">3 × 10 each side · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=wiFNA3sqjCA" target="_blank">▶ Watch</a></div>
+        <div class="section-label">🧘 Cool-Down — 8 min · via Bend</div>
+        <div class="expand-block">
+          <div class="expand-header" onclick="toggleExpand(this)">
+            <span class="expand-title">Bend Full Body Cool-Down</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="expand-body">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div class="step-detail"><strong>Upward Salute</strong> <span>— 30s · sweep arms overhead, reach tall, core engaged</span></div></li>
+              <li><span class="step-num">2</span><div class="step-detail"><strong>Toe Touch</strong> <span>— 30s · hinge at hips, let head hang, soft knees</span></div></li>
+              <li><span class="step-num">3</span><div class="step-detail"><strong>Upward Dog</strong> <span>— 30s · on stomach, press up, lift chest, tops of feet on floor</span></div></li>
+              <li><span class="step-num">4</span><div class="step-detail"><strong>Child's Pose</strong> <span>— 30s · knees wide, arms forward, forehead to floor</span></div></li>
+              <li><span class="step-num">5</span><div class="step-detail"><strong>Knees-to-Chest</strong> <span>— 30s · on back, hug both knees in, lower back flat</span></div></li>
+              <li><span class="step-num">6</span><div class="step-detail"><strong>Lying Figure Four</strong> <span>— 60s · cross ankle over thigh, pull bottom leg toward chest</span></div></li>
+              <li><span class="step-num">7</span><div class="step-detail"><strong>Reclined Butterfly</strong> <span>— 30s · soles of feet together, knees fall out, arms relaxed</span></div></li>
+              <li><span class="step-num">8</span><div class="step-detail"><strong>Spinal Twist</strong> <span>— 60s · on back, drop bent knee across body, shoulders flat</span></div></li>
+              <li><span class="step-num">9</span><div class="step-detail"><strong>Quad Stretch</strong> <span>— 60s · seated, bend knee, heel to glute, lean back on elbows</span></div></li>
+              <li><span class="step-num">10</span><div class="step-detail"><strong>Butterfly</strong> <span>— 30s · seated, soles together, gently press knees toward floor</span></div></li>
+              <li><span class="step-num">11</span><div class="step-detail"><strong>Seated Fold</strong> <span>— 30s · legs straight, hinge forward, reach toward feet</span></div></li>
+            </ul>
+            <a class="video-link-small" href="https://bend.com/routines/cool-down" target="_blank">▶ View on Bend</a>
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Slow, controlled reps. Quality over quantity.</div>
+      </div>
+    </div>
+
+    <!-- WEDNESDAY -->
+    <div class="day-card wed" id="card-wed">
+      <div class="day-header">
+        <div class="day-header-left">
+          <div class="dot"></div>
+          <div>
+            <div class="day-label">Wednesday</div>
+            <div class="day-sub">Mobility & Core</div>
+          </div>
+        </div>
+        <button class="start-btn" onclick="startWorkout('wed')">▶ Start</button>
+      </div>
+      <div class="exercises">
+        <div class="section-label">🔥 Warm-Up — 5 min · via Bend</div>
+        <div class="expand-block">
+          <div class="expand-header" onclick="toggleExpand(this)">
+            <span class="expand-title">Bend Full Body Warm-Up</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="expand-body">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div class="step-detail"><strong>March in Place</strong> <span>— 30s · lift knees gently, get blood flowing first</span></div></li>
+              <li><span class="step-num">2</span><div class="step-detail"><strong>Jumping Jacks</strong> <span>— 30s · land softly on balls of feet, slight knee bend</span></div></li>
+              <li><span class="step-num">3</span><div class="step-detail"><strong>Air Squats</strong> <span>— 30s · feet shoulder-width, thighs parallel to floor</span></div></li>
+              <li><span class="step-num">4</span><div class="step-detail"><strong>Lateral Lunge</strong> <span>— 30s · feet wide, bend one knee and lower hips to that side</span></div></li>
+              <li><span class="step-num">5</span><div class="step-detail"><strong>Arm Circles</strong> <span>— 30s · arms out to sides, small to big circles, then reverse</span></div></li>
+              <li><span class="step-num">6</span><div class="step-detail"><strong>Arm Swings</strong> <span>— 30s · swing arms forward across chest then back out wide</span></div></li>
+              <li><span class="step-num">7</span><div class="step-detail"><strong>Trunk Twist</strong> <span>— 30s · arms out at shoulder height, twist side to side, hips forward</span></div></li>
+              <li><span class="step-num">8</span><div class="step-detail"><strong>Toe Touch Twist</strong> <span>— 30s · bend forward, touch opposite toe with opposite hand</span></div></li>
+              <li><span class="step-num">9</span><div class="step-detail"><strong>Knee Hugs</strong> <span>— 30s · lift one knee to chest, hug it in, alternate legs</span></div></li>
+              <li><span class="step-num">10</span><div class="step-detail"><strong>Leg Swings</strong> <span>— 30s · hold wall, swing leg forward and back, then switch</span></div></li>
+              <li><span class="step-num">11</span><div class="step-detail"><strong>Knee Circles</strong> <span>— 30s · hands on knees, small circles both directions</span></div></li>
+            </ul>
+            <a class="video-link-small" href="https://bend.com/routines/warm-up" target="_blank">▶ View on Bend</a>
+          </div>
+        </div>
+        <div class="section-label">🧘 Main Work</div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Cat-Cow Stretch</div><div class="ex-row-meta">2 × 10 reps · 30s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=kqnua4rHVVA" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Hip Flexor Lunge Stretch</div><div class="ex-row-meta">2 × 30s each side</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=YqF8BnMrRY8" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Dead Bug</div><div class="ex-row-meta">3 × 8 each side · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=g_BYB0R-4Ws" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Superman Hold</div><div class="ex-row-meta">3 × 10 · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=z6PJMT2y8GQ" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Side-Lying Clamshells</div><div class="ex-row-meta">3 × 12 each side · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=SJ0pHOvKLhA" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Seated Spinal Twist</div><div class="ex-row-meta">2 × 30s each side</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=q27Lrn-jgM4" target="_blank">▶ Watch</a></div>
+        <div class="section-label">🧘 Cool-Down — 8 min · via Bend</div>
+        <div class="expand-block">
+          <div class="expand-header" onclick="toggleExpand(this)">
+            <span class="expand-title">Bend Full Body Cool-Down</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="expand-body">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div class="step-detail"><strong>Upward Salute</strong> <span>— 30s · sweep arms overhead, reach tall, core engaged</span></div></li>
+              <li><span class="step-num">2</span><div class="step-detail"><strong>Toe Touch</strong> <span>— 30s · hinge at hips, let head hang, soft knees</span></div></li>
+              <li><span class="step-num">3</span><div class="step-detail"><strong>Upward Dog</strong> <span>— 30s · on stomach, press up, lift chest, tops of feet on floor</span></div></li>
+              <li><span class="step-num">4</span><div class="step-detail"><strong>Child's Pose</strong> <span>— 30s · knees wide, arms forward, forehead to floor</span></div></li>
+              <li><span class="step-num">5</span><div class="step-detail"><strong>Knees-to-Chest</strong> <span>— 30s · on back, hug both knees in, lower back flat</span></div></li>
+              <li><span class="step-num">6</span><div class="step-detail"><strong>Lying Figure Four</strong> <span>— 60s · cross ankle over thigh, pull bottom leg toward chest</span></div></li>
+              <li><span class="step-num">7</span><div class="step-detail"><strong>Reclined Butterfly</strong> <span>— 30s · soles of feet together, knees fall out, arms relaxed</span></div></li>
+              <li><span class="step-num">8</span><div class="step-detail"><strong>Spinal Twist</strong> <span>— 60s · on back, drop bent knee across body, shoulders flat</span></div></li>
+              <li><span class="step-num">9</span><div class="step-detail"><strong>Quad Stretch</strong> <span>— 60s · seated, bend knee, heel to glute, lean back on elbows</span></div></li>
+              <li><span class="step-num">10</span><div class="step-detail"><strong>Butterfly</strong> <span>— 30s · seated, soles together, gently press knees toward floor</span></div></li>
+              <li><span class="step-num">11</span><div class="step-detail"><strong>Seated Fold</strong> <span>— 30s · legs straight, hinge forward, reach toward feet</span></div></li>
+            </ul>
+            <a class="video-link-small" href="https://bend.com/routines/cool-down" target="_blank">▶ View on Bend</a>
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Never rush the stretches — breathe through each one.</div>
+      </div>
+    </div>
+
+    <!-- FRIDAY -->
+    <div class="day-card fri" id="card-fri">
+      <div class="day-header">
+        <div class="day-header-left">
+          <div class="dot"></div>
+          <div>
+            <div class="day-label">Friday</div>
+            <div class="day-sub">Cardio & Endurance</div>
+          </div>
+        </div>
+        <button class="start-btn" onclick="startWorkout('fri')">▶ Start</button>
+      </div>
+      <div class="exercises">
+        <div class="section-label">🔥 Warm-Up — 5 min · via Bend</div>
+        <div class="expand-block">
+          <div class="expand-header" onclick="toggleExpand(this)">
+            <span class="expand-title">Bend Full Body Warm-Up</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="expand-body">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div class="step-detail"><strong>March in Place</strong> <span>— 30s · lift knees gently, get blood flowing first</span></div></li>
+              <li><span class="step-num">2</span><div class="step-detail"><strong>Jumping Jacks</strong> <span>— 30s · land softly on balls of feet, slight knee bend</span></div></li>
+              <li><span class="step-num">3</span><div class="step-detail"><strong>Air Squats</strong> <span>— 30s · feet shoulder-width, thighs parallel to floor</span></div></li>
+              <li><span class="step-num">4</span><div class="step-detail"><strong>Lateral Lunge</strong> <span>— 30s · feet wide, bend one knee and lower hips to that side</span></div></li>
+              <li><span class="step-num">5</span><div class="step-detail"><strong>Arm Circles</strong> <span>— 30s · arms out to sides, small to big circles, then reverse</span></div></li>
+              <li><span class="step-num">6</span><div class="step-detail"><strong>Arm Swings</strong> <span>— 30s · swing arms forward across chest then back out wide</span></div></li>
+              <li><span class="step-num">7</span><div class="step-detail"><strong>Trunk Twist</strong> <span>— 30s · arms out at shoulder height, twist side to side, hips forward</span></div></li>
+              <li><span class="step-num">8</span><div class="step-detail"><strong>Toe Touch Twist</strong> <span>— 30s · bend forward, touch opposite toe with opposite hand</span></div></li>
+              <li><span class="step-num">9</span><div class="step-detail"><strong>Knee Hugs</strong> <span>— 30s · lift one knee to chest, hug it in, alternate legs</span></div></li>
+              <li><span class="step-num">10</span><div class="step-detail"><strong>Leg Swings</strong> <span>— 30s · hold wall, swing leg forward and back, then switch</span></div></li>
+              <li><span class="step-num">11</span><div class="step-detail"><strong>Knee Circles</strong> <span>— 30s · hands on knees, small circles both directions</span></div></li>
+            </ul>
+            <a class="video-link-small" href="https://bend.com/routines/warm-up" target="_blank">▶ View on Bend</a>
+          </div>
+        </div>
+        <div class="section-label">❤️ Main Work</div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Jumping Jacks (or Step Jacks)</div><div class="ex-row-meta">3 × 30s · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=iSSAk4XCsRA" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Step-Back Lunges</div><div class="ex-row-meta">3 × 10 each leg · 60s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=D7KaRcUTQeE" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Mountain Climbers (slow)</div><div class="ex-row-meta">3 × 20s · 45s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=nmwgirgXLYM" target="_blank">▶ Watch</a></div>
+        <div class="ex-row"><div class="ex-row-left"><div class="ex-row-name">Wall Sit</div><div class="ex-row-meta">3 × 30s · 60s rest</div></div><a class="video-btn" href="https://www.youtube.com/watch?v=y-wV4Venusw" target="_blank">▶ Watch</a></div>
+        <div class="section-label">🧘 Cool-Down — 8 min · via Bend</div>
+        <div class="expand-block">
+          <div class="expand-header" onclick="toggleExpand(this)">
+            <span class="expand-title">Bend Full Body Cool-Down</span>
+            <span class="expand-arrow">▼</span>
+          </div>
+          <div class="expand-body">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div class="step-detail"><strong>Upward Salute</strong> <span>— 30s · sweep arms overhead, reach tall, core engaged</span></div></li>
+              <li><span class="step-num">2</span><div class="step-detail"><strong>Toe Touch</strong> <span>— 30s · hinge at hips, let head hang, soft knees</span></div></li>
+              <li><span class="step-num">3</span><div class="step-detail"><strong>Upward Dog</strong> <span>— 30s · on stomach, press up, lift chest, tops of feet on floor</span></div></li>
+              <li><span class="step-num">4</span><div class="step-detail"><strong>Child's Pose</strong> <span>— 30s · knees wide, arms forward, forehead to floor</span></div></li>
+              <li><span class="step-num">5</span><div class="step-detail"><strong>Knees-to-Chest</strong> <span>— 30s · on back, hug both knees in, lower back flat</span></div></li>
+              <li><span class="step-num">6</span><div class="step-detail"><strong>Lying Figure Four</strong> <span>— 60s · cross ankle over thigh, pull bottom leg toward chest</span></div></li>
+              <li><span class="step-num">7</span><div class="step-detail"><strong>Reclined Butterfly</strong> <span>— 30s · soles of feet together, knees fall out, arms relaxed</span></div></li>
+              <li><span class="step-num">8</span><div class="step-detail"><strong>Spinal Twist</strong> <span>— 60s · on back, drop bent knee across body, shoulders flat</span></div></li>
+              <li><span class="step-num">9</span><div class="step-detail"><strong>Quad Stretch</strong> <span>— 60s · seated, bend knee, heel to glute, lean back on elbows</span></div></li>
+              <li><span class="step-num">10</span><div class="step-detail"><strong>Butterfly</strong> <span>— 30s · seated, soles together, gently press knees toward floor</span></div></li>
+              <li><span class="step-num">11</span><div class="step-detail"><strong>Seated Fold</strong> <span>— 30s · legs straight, hinge forward, reach toward feet</span></div></li>
+            </ul>
+            <a class="video-link-small" href="https://bend.com/routines/cool-down" target="_blank">▶ View on Bend</a>
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Step jacks are a great low-impact swap if your knees need it.</div>
+      </div>
+    </div>
+
+  </div>
+  <footer>Tap ▶ Start on any day to begin the guided workout · Tap exercise rows to expand warm-up & cool-down</footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     WORKOUT VIEW
+═══════════════════════════════════════════ -->
+<div id="workout-view">
+  <div class="wv-topbar">
+    <div class="wv-day-label" id="wv-day-label">Monday</div>
+    <div class="wv-progress-text" id="wv-progress-text">Exercise 1 of 5</div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+  </div>
+
+  <div class="timer-circle-wrap">
+    <svg class="timer-svg" viewBox="0 0 220 220">
+      <circle class="timer-track" cx="110" cy="110" r="95"/>
+      <circle class="timer-fill" id="timer-ring" cx="110" cy="110" r="95"
+        stroke-dasharray="597"
+        stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-center">
+      <div class="timer-number" id="timer-number">40</div>
+      <div class="timer-label" id="timer-label">GET READY</div>
+    </div>
+  </div>
+
+  <div class="ex-info-card" id="ex-info-card">
+    <div class="ex-info-phase" id="ex-info-phase">EXERCISE</div>
+    <div class="ex-info-name" id="ex-info-name">Bodyweight Squats</div>
+    <div class="ex-info-detail" id="ex-info-detail">Set 1 of 3 · 12 reps</div>
+    <div class="ex-info-sets" id="ex-info-sets"></div>
+  </div>
+
+  <div class="next-up-card" id="next-up-card">
+    <div class="next-up-label">Up next →</div>
+    <div class="next-up-name" id="next-up-name">Push-Ups</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-stop" onclick="stopWorkout()">✕ Stop</button>
+    <button class="btn-pause" id="btn-pause" onclick="togglePause()">⏸ Pause</button>
+    <button class="btn-skip" onclick="skipStep()">Skip ›</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     COMPLETE VIEW
+═══════════════════════════════════════════ -->
+<div id="complete-view">
+  <div class="complete-emoji">🏆</div>
+  <div class="complete-title" id="complete-title">Workout Done!</div>
+  <div class="complete-sub" id="complete-sub">You crushed it. Rest up and come back stronger.</div>
+  <button class="btn-back" id="btn-back-complete" onclick="backToPlan()">← Back to Plan</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAUSE OVERLAY
+═══════════════════════════════════════════ -->
+<div id="pause-overlay">
+  <div class="pause-title">PAUSED</div>
+  <div class="pause-sub">Take your time. Resume when you're ready.</div>
+  <button class="btn-resume" onclick="togglePause()">▶ Resume</button>
+</div>
+
+<script>
+// ── WAKE LOCK ──
+let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch (err) {
+    console.log('Wake lock failed:', err);
+  }
+}
+
+async function releaseWakeLock() {
+  try {
+    if (wakeLock) {
+      await wakeLock.release();
+      wakeLock = null;
+    }
+  } catch (err) {
+    console.log('Wake lock release failed:', err);
+  }
+}
+
+// Re-acquire wake lock if page becomes visible again (e.g. after tab switch)
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    await requestWakeLock();
+  }
+});
+
+// ── WORKOUT DATA ──
+// phase: 'warmup' | 'main' | 'cooldown'
+// For warmup/cooldown: sets=1, reps=description, workTime=hold duration, restTime=transition gap
+const BEND_WARMUP = [
+  { name: 'March in Place',   phase:'warmup', sets:1, reps:'Get blood flowing', workTime:30, restTime:5 },
+  { name: 'Jumping Jacks',    phase:'warmup', sets:1, reps:'Land softly',        workTime:30, restTime:5 },
+  { name: 'Air Squats',       phase:'warmup', sets:1, reps:'Thighs parallel',    workTime:30, restTime:5 },
+  { name: 'Lateral Lunge',    phase:'warmup', sets:1, reps:'Each side',          workTime:30, restTime:5 },
+  { name: 'Arm Circles',      phase:'warmup', sets:1, reps:'Forward then back',  workTime:30, restTime:5 },
+  { name: 'Arm Swings',       phase:'warmup', sets:1, reps:'Across chest & out', workTime:30, restTime:5 },
+  { name: 'Trunk Twist',      phase:'warmup', sets:1, reps:'Hips forward',       workTime:30, restTime:5 },
+  { name: 'Toe Touch Twist',  phase:'warmup', sets:1, reps:'Opposite hand to toe',workTime:30, restTime:5 },
+  { name: 'Knee Hugs',        phase:'warmup', sets:1, reps:'Alternate legs',     workTime:30, restTime:5 },
+  { name: 'Leg Swings',       phase:'warmup', sets:1, reps:'Hold wall, each leg',workTime:30, restTime:5 },
+  { name: 'Knee Circles',     phase:'warmup', sets:1, reps:'Both directions',    workTime:30, restTime:5 },
+];
+
+const BEND_COOLDOWN = [
+  { name: 'Upward Salute',      phase:'cooldown', sets:1, reps:'Reach tall',           workTime:30, restTime:5 },
+  { name: 'Toe Touch',          phase:'cooldown', sets:1, reps:'Soft knees',            workTime:30, restTime:5 },
+  { name: 'Upward Dog',         phase:'cooldown', sets:1, reps:'Lift chest',            workTime:30, restTime:5 },
+  { name: "Child's Pose",       phase:'cooldown', sets:1, reps:'Arms forward',          workTime:30, restTime:5 },
+  { name: 'Knees-to-Chest',     phase:'cooldown', sets:1, reps:'Back flat',             workTime:30, restTime:5 },
+  { name: 'Lying Figure Four',  phase:'cooldown', sets:1, reps:'Pull leg to chest',     workTime:60, restTime:5 },
+  { name: 'Reclined Butterfly', phase:'cooldown', sets:1, reps:'Let knees fall out',    workTime:30, restTime:5 },
+  { name: 'Spinal Twist',       phase:'cooldown', sets:1, reps:'Shoulders flat',        workTime:60, restTime:5 },
+  { name: 'Quad Stretch',       phase:'cooldown', sets:1, reps:'Heel to glute',         workTime:60, restTime:5 },
+  { name: 'Butterfly',          phase:'cooldown', sets:1, reps:'Press knees down',      workTime:30, restTime:5 },
+  { name: 'Seated Fold',        phase:'cooldown', sets:1, reps:'Reach toward feet',     workTime:30, restTime:0 },
+];
+
+const WORKOUTS = {
+  mon: {
+    label: 'Monday',
+    color: '#4ade80',
+    exercises: [
+      ...BEND_WARMUP,
+      { name: 'Bodyweight Squats', phase:'main', sets: 3, reps: '12 reps',      workTime: 40, restTime: 60 },
+      { name: 'Push-Ups',          phase:'main', sets: 3, reps: '10 reps',      workTime: 40, restTime: 60 },
+      { name: 'Glute Bridges',     phase:'main', sets: 3, reps: '15 reps',      workTime: 40, restTime: 45 },
+      { name: 'Plank Hold',        phase:'main', sets: 3, reps: '30 sec hold',  workTime: 30, restTime: 45 },
+      { name: 'Bird-Dog',          phase:'main', sets: 3, reps: '10 each side', workTime: 40, restTime: 45 },
+      ...BEND_COOLDOWN,
+    ]
+  },
+  wed: {
+    label: 'Wednesday',
+    color: '#60a5fa',
+    exercises: [
+      ...BEND_WARMUP,
+      { name: 'Cat-Cow Stretch',          phase:'main', sets: 2, reps: '10 reps',       workTime: 30, restTime: 30 },
+      { name: 'Hip Flexor Lunge Stretch', phase:'main', sets: 2, reps: '30s each side', workTime: 30, restTime: 30 },
+      { name: 'Dead Bug',                 phase:'main', sets: 3, reps: '8 each side',   workTime: 40, restTime: 45 },
+      { name: 'Superman Hold',            phase:'main', sets: 3, reps: '10 reps',       workTime: 40, restTime: 45 },
+      { name: 'Side-Lying Clamshells',    phase:'main', sets: 3, reps: '12 each side',  workTime: 40, restTime: 45 },
+      { name: 'Seated Spinal Twist',      phase:'main', sets: 2, reps: '30s each side', workTime: 30, restTime: 30 },
+      ...BEND_COOLDOWN,
+    ]
+  },
+  fri: {
+    label: 'Friday',
+    color: '#fb923c',
+    exercises: [
+      ...BEND_WARMUP,
+      { name: 'Jumping Jacks',    phase:'main', sets: 3, reps: '30 sec',       workTime: 30, restTime: 45 },
+      { name: 'Step-Back Lunges', phase:'main', sets: 3, reps: '10 each leg',  workTime: 40, restTime: 60 },
+      { name: 'Mountain Climbers',phase:'main', sets: 3, reps: '20 sec slow',  workTime: 20, restTime: 45 },
+      { name: 'Wall Sit',         phase:'main', sets: 3, reps: '30 sec hold',  workTime: 30, restTime: 60 },
+      ...BEND_COOLDOWN,
+    ]
+  }
+};
+
+// ── STATE ──
+let currentDay = null;
+let exercises = [];
+let exIndex = 0;
+let currentSet = 0;
+let isResting = false;
+let timeLeft = 0;
+let totalDuration = 0;
+let elapsedTime = 0;
+let isPaused = false;
+let timerInterval = null;
+
+const CIRCUMFERENCE = 2 * Math.PI * 95; // 597
+
+// ── AUDIO CUES ──
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playBeep(frequency, duration, volume = 0.4, type = 'sine') {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+    gain.gain.setValueAtTime(volume, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+// 🟢 Work start — two ascending beeps (upbeat, let's go!)
+function soundWorkStart() {
+  playBeep(660, 0.12, 0.4);
+  setTimeout(() => playBeep(880, 0.2, 0.5), 130);
+}
+
+// 🔴 Rest start — one low descending tone (slow down)
+function soundRestStart() {
+  playBeep(440, 0.15, 0.35);
+  setTimeout(() => playBeep(330, 0.25, 0.3), 150);
+}
+
+// ⏱ 3-second countdown beeps — soft tick
+function soundCountdown() {
+  playBeep(540, 0.08, 0.25, 'square');
+}
+
+// 🏁 Workout complete — triumphant 3-note chord
+function soundComplete() {
+  playBeep(523, 0.3, 0.4);
+  setTimeout(() => playBeep(659, 0.3, 0.4), 200);
+  setTimeout(() => playBeep(784, 0.5, 0.5), 400);
+}
+
+// ── PLAN VIEW HELPERS ──
+function toggleExpand(el) {
+  const body = el.nextElementSibling;
+  const arrow = el.querySelector('.expand-arrow');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+}
+
+// ── START ──
+function startWorkout(day) {
+  currentDay = day;
+  exercises = WORKOUTS[day].exercises;
+  exIndex = 0;
+  currentSet = 0;
+  isResting = false;
+  isPaused = false;
+  elapsedTime = 0;
+
+  // Compute total duration estimate
+  totalDuration = exercises.reduce((acc, ex) => {
+    return acc + ex.sets * ex.workTime + (ex.sets - 1) * ex.restTime;
+  }, 0);
+
+  // Style accent colour
+  const color = WORKOUTS[day].color;
+  document.getElementById('timer-ring').style.stroke = color;
+  document.querySelector('.progress-bar-fill').style.background = color;
+  document.getElementById('wv-day-label').style.color = color;
+  document.getElementById('btn-back-complete').style.background = color;
+  document.getElementById('btn-back-complete').style.color = '#000';
+
+  showView('workout');
+  requestWakeLock();
+  beginStep();
+}
+
+function beginStep() {
+  const ex = exercises[exIndex];
+  isResting = false;
+  timeLeft = ex.workTime;
+  updateDisplay();
+  soundWorkStart();
+  startTick();
+}
+
+function beginRest() {
+  const ex = exercises[exIndex];
+  isResting = true;
+  timeLeft = ex.restTime;
+  updateDisplay();
+  soundRestStart();
+  startTick();
+}
+
+function startTick() {
+  clearInterval(timerInterval);
+  const ex = exercises[exIndex];
+  const totalForStep = isResting ? ex.restTime : ex.workTime;
+  updateRing(timeLeft, totalForStep);
+
+  timerInterval = setInterval(() => {
+    if (isPaused) return;
+    timeLeft--;
+    elapsedTime++;
+    updateRing(timeLeft, totalForStep);
+    document.getElementById('timer-number').textContent = timeLeft;
+
+    // Countdown beeps at 3, 2, 1
+    if (timeLeft <= 3 && timeLeft > 0) soundCountdown();
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      onStepComplete();
+    }
+  }, 1000);
+}
+
+function onStepComplete() {
+  const ex = exercises[exIndex];
+
+  if (!isResting) {
+    currentSet++;
+    if (currentSet < ex.sets) {
+      // More sets — go to rest
+      beginRest();
+    } else {
+      // All sets done — move to next exercise
+      exIndex++;
+      currentSet = 0;
+      if (exIndex < exercises.length) {
+        beginRest(); // brief rest before next exercise
+      } else {
+        finishWorkout();
+      }
+    }
+  } else {
+    // Rest done — begin next work set
+    beginStep();
+  }
+  updateDisplay();
+}
+
+function updateDisplay() {
+  const ex = exercises[exIndex] || exercises[exercises.length - 1];
+  const day = WORKOUTS[currentDay];
+  const phase = ex.phase || 'main';
+
+  // Phase label & icon
+  let phaseIcon, timerLabel, ringColor;
+  if (isResting) {
+    phaseIcon = '💤 REST';
+    timerLabel = 'REST';
+    ringColor = '#555';
+  } else if (phase === 'warmup') {
+    phaseIcon = '🔥 WARM-UP';
+    timerLabel = 'GO!';
+    ringColor = '#facc15';
+  } else if (phase === 'cooldown') {
+    phaseIcon = '🧘 COOL-DOWN';
+    timerLabel = 'HOLD';
+    ringColor = '#a78bfa';
+  } else {
+    phaseIcon = '💪 EXERCISE';
+    timerLabel = 'GO!';
+    ringColor = day.color;
+  }
+
+  document.getElementById('ex-info-phase').textContent = phaseIcon;
+  document.getElementById('timer-label').textContent = timerLabel;
+  document.getElementById('timer-ring').style.stroke = ringColor;
+  document.getElementById('timer-number').textContent = timeLeft;
+
+  // Exercise name & detail
+  document.getElementById('ex-info-name').textContent = ex.name;
+  if (phase === 'warmup' || phase === 'cooldown') {
+    document.getElementById('ex-info-detail').textContent = ex.reps;
+  } else {
+    document.getElementById('ex-info-detail').textContent = `Set ${currentSet + 1} of ${ex.sets} · ${ex.reps}`;
+  }
+
+  // Set dots — only show for main exercises
+  const dotsEl = document.getElementById('ex-info-sets');
+  dotsEl.innerHTML = '';
+  if (phase === 'main') {
+    for (let i = 0; i < ex.sets; i++) {
+      const d = document.createElement('div');
+      d.className = 'set-dot';
+      if (i < currentSet) {
+        d.classList.add('done');
+        d.style.background = day.color;
+      } else if (i === currentSet && !isResting) {
+        d.classList.add('active');
+        d.style.background = day.color;
+      }
+      dotsEl.appendChild(d);
+    }
+  }
+
+  // Progress — count only main exercises for the label
+  const mainExercises = exercises.filter(e => e.phase === 'main');
+  const mainIndex = exercises.slice(0, exIndex + 1).filter(e => e.phase === 'main').length;
+  if (phase === 'warmup') {
+    document.getElementById('wv-progress-text').textContent = `🔥 Warm-Up`;
+  } else if (phase === 'cooldown') {
+    document.getElementById('wv-progress-text').textContent = `🧘 Cool-Down`;
+  } else {
+    document.getElementById('wv-progress-text').textContent = `Exercise ${mainIndex} of ${mainExercises.length}`;
+  }
+
+  const pct = totalDuration > 0 ? Math.min(100, (elapsedTime / totalDuration) * 100) : 0;
+  document.getElementById('progress-bar-fill').style.width = pct + '%';
+
+  // Next up
+  const nextEx = exercises[exIndex + 1];
+  const nextCard = document.getElementById('next-up-card');
+  if (nextEx) {
+    document.getElementById('next-up-name').textContent = nextEx.name;
+    nextCard.style.display = 'flex';
+  } else if (!isResting && exIndex === exercises.length - 1) {
+    document.getElementById('next-up-name').textContent = '🏁 Cool-Down & you\'re done!';
+    nextCard.style.display = 'flex';
+  } else {
+    nextCard.style.display = 'none';
+  }
+}
+
+function updateRing(current, total) {
+  const offset = CIRCUMFERENCE - (current / total) * CIRCUMFERENCE;
+  document.getElementById('timer-ring').style.strokeDashoffset = offset;
+}
+
+// ── PAUSE ──
+function togglePause() {
+  isPaused = !isPaused;
+  const overlay = document.getElementById('pause-overlay');
+  overlay.style.display = isPaused ? 'flex' : 'none';
+  document.getElementById('btn-pause').textContent = isPaused ? '▶ Resume' : '⏸ Pause';
+}
+
+// ── SKIP ──
+function skipStep() {
+  clearInterval(timerInterval);
+  timeLeft = 0;
+  onStepComplete();
+}
+
+// ── STOP ──
+function stopWorkout() {
+  clearInterval(timerInterval);
+  releaseWakeLock();
+  isPaused = false;
+  document.getElementById('pause-overlay').style.display = 'none';
+  backToPlan();
+}
+
+// ── FINISH ──
+function finishWorkout() {
+  clearInterval(timerInterval);
+  releaseWakeLock();
+  soundComplete();
+  const day = WORKOUTS[currentDay];
+  document.getElementById('complete-title').textContent = day.label + ' Done! 💪';
+  document.getElementById('complete-sub').textContent =
+    `You completed all ${exercises.length} exercises.\nRemember to do your cool-down stretch — your body will thank you tomorrow!`;
+  showView('complete');
+}
+
+function backToPlan() {
+  clearInterval(timerInterval);
+  showView('plan');
+}
+
+// ── VIEW SWITCHING ──
+function showView(view) {
+  document.getElementById('plan-view').style.display = view === 'plan' ? 'block' : 'none';
+  document.getElementById('workout-view').style.display = view === 'workout' ? 'flex' : 'none';
+  document.getElementById('complete-view').style.display = view === 'complete' ? 'flex' : 'none';
+}
+
+// Init
+showView('plan');
+</script>
+</body>
+</html>
