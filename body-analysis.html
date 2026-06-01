@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Body Part Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #141414;
+    --card2: #1a1a1a;
+    --mon: #4ade80;
+    --wed: #60a5fa;
+    --fri: #fb923c;
+    --cd: #a78bfa;
+    --wu: #facc15;
+    --text: #f0f0f0;
+    --muted: #666;
+    --border: #222;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    padding: 2rem 1rem 4rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, #4ade80, #60a5fa, #fb923c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #aaa;
+  }
+
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* Filter tabs */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .filter-btn:hover { color: var(--text); border-color: #444; }
+  .filter-btn.active { color: #000; border-color: transparent; }
+  .filter-btn.all.active { background: var(--text); }
+  .filter-btn.mon.active { background: var(--mon); }
+  .filter-btn.wed.active { background: var(--wed); }
+  .filter-btn.fri.active { background: var(--fri); }
+
+  /* Body part sections */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .bp-card {
+    background: var(--card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: opacity 0.2s;
+  }
+
+  .bp-card.hidden { display: none; }
+
+  .bp-header {
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bp-icon { font-size: 1.3rem; }
+
+  .bp-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+  }
+
+  .bp-count {
+    margin-left: auto;
+    font-size: 0.68rem;
+    color: var(--muted);
+    background: var(--card2);
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .ex-list {
+    padding: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ex-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    background: var(--card2);
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: opacity 0.2s;
+  }
+
+  .ex-item.mon { border-left-color: var(--mon); }
+  .ex-item.wed { border-left-color: var(--wed); }
+  .ex-item.fri { border-left-color: var(--fri); }
+  .ex-item.warmup { border-left-color: var(--wu); }
+  .ex-item.cooldown { border-left-color: var(--cd); }
+
+  .ex-item.faded { opacity: 0.15; }
+
+  .ex-day-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-mon { background: #052e16; color: var(--mon); }
+  .badge-wed { background: #03122b; color: var(--wed); }
+  .badge-fri { background: #2c0e00; color: var(--fri); }
+  .badge-warmup { background: #2a2000; color: var(--wu); }
+  .badge-cooldown { background: #1a0d2e; color: var(--cd); }
+
+  .ex-item-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .ex-item-role {
+    font-size: 0.68rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.72rem;
+    margin-top: 2.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Body Part Analysis</h1>
+  <p>Every exercise mapped to the muscles it targets</p>
+</header>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:var(--wu)"></div> Warm-Up</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--mon)"></div> Monday</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--wed)"></div> Wednesday</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--fri)"></div> Friday</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--cd)"></div> Cool-Down</div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn all active" onclick="filter('all', this)">All Days</button>
+  <button class="filter-btn mon" onclick="filter('mon', this)">Monday Only</button>
+  <button class="filter-btn wed" onclick="filter('wed', this)">Wednesday Only</button>
+  <button class="filter-btn fri" onclick="filter('fri', this)">Friday Only</button>
+</div>
+
+<div class="grid" id="grid">
+
+  <!-- CHEST -->
+  <div class="bp-card" data-days="mon fri warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🫁</span>
+      <span class="bp-name">Chest</span>
+      <span class="bp-count">4 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Arm Swings</span><span class="ex-item-role">Primer</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bottom Push-Up Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Shaolin Wall Push</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Upward Dog</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- SHOULDERS -->
+  <div class="bp-card" data-days="mon fri warmup wed">
+    <div class="bp-header">
+      <span class="bp-icon">💪</span>
+      <span class="bp-name">Shoulders</span>
+      <span class="bp-count">6 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Arm Circles</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Arm Swings</span><span class="ex-item-role">Primer</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bottom Push-Up Hold</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Plank Hold</span><span class="ex-item-role">Stabiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Puppy Pose</span><span class="ex-item-role">Stretch</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Shaolin Wall Push</span><span class="ex-item-role">Secondary</span></div>
+    </div>
+  </div>
+
+  <!-- UPPER BACK -->
+  <div class="bp-card" data-days="mon wed warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🔙</span>
+      <span class="bp-name">Upper Back</span>
+      <span class="bp-count">5 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Trunk Twist</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Prone YTW</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bird-Dog Hold</span><span class="ex-item-role">Stabiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Superman Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Puppy Pose</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- LOWER BACK -->
+  <div class="bp-card" data-days="mon wed cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🦴</span>
+      <span class="bp-name">Lower Back</span>
+      <span class="bp-count">6 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bird-Dog Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Plank Hold</span><span class="ex-item-role">Stabiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Cat-Cow Stretch</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Superman Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Child's Pose</span><span class="ex-item-role">Stretch</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Knees-to-Chest</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- CORE -->
+  <div class="bp-card" data-days="mon wed fri warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🎯</span>
+      <span class="bp-name">Core</span>
+      <span class="bp-count">9 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Trunk Twist</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Toe Touch Twist</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Plank Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bird-Dog Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Cat-Cow Stretch</span><span class="ex-item-role">Stabiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Dead Bug</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Hollow Body Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Bear Crawl Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Spinal Twist L+R</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- GLUTES -->
+  <div class="bp-card" data-days="mon wed fri warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🍑</span>
+      <span class="bp-name">Glutes</span>
+      <span class="bp-count">9 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Knee Hugs</span><span class="ex-item-role">Primer</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bow Stance R+L</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Deep Squat Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bird-Dog Hold</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">90/90 Hip Hold</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Superman Hold</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Clamshells L+R</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Horse Stance</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Lying Figure Four L+R</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- QUADS -->
+  <div class="bp-card" data-days="mon fri cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🦵</span>
+      <span class="bp-name">Quads</span>
+      <span class="bp-count">5 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bow Stance R+L</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Deep Squat Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Horse Stance</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Wall Sit</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Quad Stretch L+R</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- HAMSTRINGS -->
+  <div class="bp-card" data-days="fri warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🦿</span>
+      <span class="bp-name">Hamstrings</span>
+      <span class="bp-count">5 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Toe Touch Twist</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Leg Swings</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Wall Sit</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Toe Touch</span><span class="ex-item-role">Stretch</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Seated Fold</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- HIPS -->
+  <div class="bp-card" data-days="mon wed warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🔄</span>
+      <span class="bp-name">Hips & Hip Flexors</span>
+      <span class="bp-count">9 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Knee Hugs</span><span class="ex-item-role">Primer</span></div>
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Leg Swings</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Deep Squat Hold</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">90/90 Hip Hold</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Dead Bug</span><span class="ex-item-role">Stabiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Clamshells L+R</span><span class="ex-item-role">Abductor</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Low Dragon L+R</span><span class="ex-item-role">Deep Stretch</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Upward Dog</span><span class="ex-item-role">Stretch</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Reclined Butterfly</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- INNER THIGHS -->
+  <div class="bp-card" data-days="fri cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🦵</span>
+      <span class="bp-name">Inner Thighs & Groin</span>
+      <span class="bp-count">4 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Horse Stance</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Reclined Butterfly</span><span class="ex-item-role">Stretch</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Butterfly</span><span class="ex-item-role">Deep Stretch</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Low Dragon L+R</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- KNEES & TENDONS -->
+  <div class="bp-card" data-days="fri warmup">
+    <div class="bp-header">
+      <span class="bp-icon">🦵</span>
+      <span class="bp-name">Knees & Tendons</span>
+      <span class="bp-count">3 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Ankle Circles</span><span class="ex-item-role">Lubricator</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Wall Sit</span><span class="ex-item-role">Tendon builder</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Horse Stance</span><span class="ex-item-role">Stabiliser</span></div>
+    </div>
+  </div>
+
+  <!-- SPINE -->
+  <div class="bp-card" data-days="wed warmup cooldown">
+    <div class="bp-header">
+      <span class="bp-icon">🦴</span>
+      <span class="bp-name">Spine & Posture</span>
+      <span class="bp-count">7 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item warmup"><span class="ex-day-badge badge-warmup">WARM-UP</span><span class="ex-item-name">Trunk Twist</span><span class="ex-item-role">Mobiliser</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Cat-Cow Stretch</span><span class="ex-item-role">Primary</span></div>
+      <div class="ex-item wed"><span class="ex-day-badge badge-wed">WED</span><span class="ex-item-name">Dead Bug</span><span class="ex-item-role">Stabiliser</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Child's Pose</span><span class="ex-item-role">Decompression</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Spinal Twist L+R</span><span class="ex-item-role">Rotation</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Upward Salute</span><span class="ex-item-role">Elongation</span></div>
+      <div class="ex-item cooldown"><span class="ex-day-badge badge-cooldown">COOL-DOWN</span><span class="ex-item-name">Seated Fold</span><span class="ex-item-role">Stretch</span></div>
+    </div>
+  </div>
+
+  <!-- TRICEPS -->
+  <div class="bp-card" data-days="mon fri">
+    <div class="bp-header">
+      <span class="bp-icon">💪</span>
+      <span class="bp-name">Triceps</span>
+      <span class="bp-count">2 exercises</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Bottom Push-Up Hold</span><span class="ex-item-role">Secondary</span></div>
+      <div class="ex-item fri"><span class="ex-day-badge badge-fri">FRI</span><span class="ex-item-name">Shaolin Wall Push</span><span class="ex-item-role">Secondary</span></div>
+    </div>
+  </div>
+
+  <!-- ROTATOR CUFF -->
+  <div class="bp-card" data-days="mon">
+    <div class="bp-header">
+      <span class="bp-icon">🔃</span>
+      <span class="bp-name">Rotator Cuff</span>
+      <span class="bp-count">1 exercise</span>
+    </div>
+    <div class="ex-list">
+      <div class="ex-item mon"><span class="ex-day-badge badge-mon">MON</span><span class="ex-item-name">Prone YTW</span><span class="ex-item-role">Primary</span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Tap day buttons above to filter by session · Primary = main target · Secondary = supporting · Stabiliser = joint protection</footer>
+
+<script>
+function filter(day, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.bp-card');
+  const items = document.querySelectorAll('.ex-item');
+
+  if (day === 'all') {
+    cards.forEach(c => c.classList.remove('hidden'));
+    items.forEach(i => i.classList.remove('faded'));
+    return;
+  }
+
+  cards.forEach(card => {
+    const days = card.dataset.days || '';
+    card.classList.toggle('hidden', !days.includes(day));
+  });
+}
+</script>
+
+</body>
+</html>
