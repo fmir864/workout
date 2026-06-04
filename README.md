@@ -13,7 +13,7 @@
 |---|---|---|
 | 💚 Monday | Full Body Strength | ~36 min |
 | 💙 Wednesday | Mobility & Core | ~36 min |
-| 🟠 Friday | Shaolin Isometric | ~24 min |
+| 🟠 Friday | Shaolin Isometric | ~26 min |
 
 Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
@@ -68,7 +68,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 ---
 
-## 🟠 Friday — Shaolin Isometric (~24 min)
+## 🟠 Friday — Shaolin Isometric (~26 min)
 
 | Exercise | Sets × Reps | Notes |
 |---|---|---|
@@ -76,9 +76,10 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | Bear Crawl Hold | 1 × 60s | Knees hover 2cm off floor, hold still |
 | Horse Stance | 1 × 60s | Feet wide, sink hips, chest tall |
 | Shaolin Wall Push | 6 × 20s | Max effort push, 10s rest between sets |
+| Bottom Push-Up Hold | 3 × 10s | Max effort, squeeze hard at bottom, 30s rest |
 | Wall Sit | 1 × 60s | Back flat, thighs parallel |
 
-> 💡 Pure Shaolin isometric today — all holds, zero impact. Focus on stillness and breathing, not pain.
+> 💡 Pure Shaolin isometric today — all holds, zero impact. Hollow Body 60s, Bear Crawl 60s, Horse Stance 60s, Wall Push 6×20s, Push-Up Hold 3×10s max effort, Wall Sit 60s. Focus on stillness and breathing, not pain.
 
 ---
 
@@ -109,7 +110,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 | Body Part | Monday | Wednesday | Friday |
 |---|---|---|---|
-| Chest | Bottom Push-Up Hold | — | Shaolin Wall Push |
+| Chest | Bottom Push-Up Hold | — | Shaolin Wall Push, Bottom Push-Up Hold |
 | Shoulders | Push-Up Hold, Plank | Puppy Pose | Wall Push |
 | Upper Back | Prone YTW, Bird-Dog | Superman Hold, Puppy Pose | — |
 | Lower Back | Bird-Dog, Plank | Cat-Cow, Superman | — |
