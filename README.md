@@ -11,9 +11,9 @@
 
 | Day | Session | Duration |
 |---|---|---|
-| 💚 Monday | Full Body Strength | ~36 min |
+| 💚 Monday | Dynamic Bodyweight | ~38 min |
 | 💙 Wednesday | Mobility & Core | ~36 min |
-| 🟠 Friday | Shaolin Isometric | ~26 min |
+| 🟠 Friday | Endurance | ~31 min |
 
 Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
@@ -35,20 +35,19 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 ---
 
-## 💚 Monday — Full Body Strength (~36 min)
+## 💚 Monday — Dynamic Bodyweight (~38 min)
 
 | Exercise | Sets × Reps | Notes |
 |---|---|---|
-| Bow Stance — Right | 3 × 30s | Right foot forward, 20s rest |
-| Bow Stance — Left | 3 × 30s | Left foot forward, 20s rest |
-| Bottom Push-Up Hold | 3 × 20s | Chest just above floor, 40s rest |
-| Deep Squat Hold | 1 × 60s | Go shallow, hold wall if needed |
-| Plank Hold | 3 × 30s | Spine neutral, 45s rest |
-| Bird-Dog Hold — Right | 3 × 30s | Right arm + left leg, hold still, 20s rest |
-| Bird-Dog Hold — Left | 3 × 30s | Left arm + right leg, hold still, 20s rest |
+| Push-Ups | 3 × 10 reps | Knee push-ups if needed, full range, 60s rest |
+| Plank Hold | 3 × 20s | Spine neutral, breathe steadily, 45s rest |
+| Bird-Dog Hold — Right | 3 × 20s | Right arm + left leg, hold still, 20s rest |
+| Bird-Dog Hold — Left | 3 × 20s | Left arm + right leg, hold still, 20s rest |
 | Prone YTW | 3 × 8 each | Y · T · W positions, face down, 45s rest |
+| Lying Leg Raises | 3 × 10 reps | Legs straight, lower slowly, back flat, 45s rest |
+| Crunches | 3 × 15 reps | Hands behind ears, lift shoulders only, 45s rest |
 
-> 💡 All static holds today — breathe through every second. Go shallow on the Deep Squat and hold a wall if needed.
+> 💡 Push-Ups 3×10 (knee if needed), Plank 3×20s, Bird-Dog 3×20s each side, YTW 3×8, Leg Raises 3×10, Crunches 3×15. For crunches — lift shoulders only. For leg raises — lower back flat throughout.
 
 ---
 
@@ -68,7 +67,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 ---
 
-## 🟠 Friday — Shaolin Isometric (~26 min)
+## 🟠 Friday — Endurance (~31 min)
 
 | Exercise | Sets × Reps | Notes |
 |---|---|---|
@@ -78,8 +77,11 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | Shaolin Wall Push | 6 × 20s | Max effort push, 10s rest between sets |
 | Bottom Push-Up Hold | 3 × 10s | Max effort, squeeze hard at bottom, 30s rest |
 | Wall Sit | 1 × 60s | Back flat, thighs parallel |
+| Deep Squat Hold | 1 × 60s | Go shallow, hold wall if needed |
+| Bow Stance — Right | 3 × 30s | Right foot forward, 20s rest |
+| Bow Stance — Left | 3 × 30s | Left foot forward, 20s rest |
 
-> 💡 Pure Shaolin isometric today — all holds, zero impact. Hollow Body 60s, Bear Crawl 60s, Horse Stance 60s, Wall Push 6×20s, Push-Up Hold 3×10s max effort, Wall Sit 60s. Focus on stillness and breathing, not pain.
+> 💡 All static holds today. Hollow Body 60s, Bear Crawl 60s, Horse Stance 60s, Wall Push 6×20s, Push-Up Hold 3×10s, Wall Sit 60s, Deep Squat 60s (go shallow), Bow Stance 3×30s each side. Focus on stillness and breathing.
 
 ---
 
@@ -110,13 +112,13 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 | Body Part | Monday | Wednesday | Friday |
 |---|---|---|---|
-| Chest | Bottom Push-Up Hold | — | Shaolin Wall Push, Bottom Push-Up Hold |
+| Chest | Push-Ups, Bottom Push-Up Hold (Fri) | — | Shaolin Wall Push, Bottom Push-Up Hold |
 | Shoulders | Push-Up Hold, Plank | Puppy Pose | Wall Push |
 | Upper Back | Prone YTW, Bird-Dog | Superman Hold, Puppy Pose | — |
 | Lower Back | Bird-Dog, Plank | Cat-Cow, Superman | — |
-| Core | Plank, Bird-Dog | Dead Bug, Cat-Cow | Hollow Body, Bear Crawl |
+| Core | Plank, Bird-Dog, Leg Raises, Crunches | Dead Bug, Cat-Cow | Hollow Body, Bear Crawl |
 | Glutes | Bow Stance, Deep Squat | Clamshells, 90/90 | Horse Stance |
-| Quads | Bow Stance, Deep Squat | — | Horse Stance, Wall Sit |
+| Quads | — | — | Horse Stance, Wall Sit, Deep Squat, Bow Stance |
 | Hamstrings | — | — | Wall Sit |
 | Hips | Deep Squat | 90/90, Clamshells, Dead Bug | — |
 | Triceps | Push-Up Hold | — | Wall Push |
@@ -158,3 +160,4 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 ---
 
 *Built with Claude · Designed for 40+ bodyweight training · No gym required*
+
