@@ -43,11 +43,11 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | Plank Hold | 3 × 20s | Spine neutral, breathe steadily, 45s rest |
 | Bird-Dog Hold — Right | 3 × 20s | Right arm + left leg, hold still, 20s rest |
 | Bird-Dog Hold — Left | 3 × 20s | Left arm + right leg, hold still, 20s rest |
-| Prone YTW | 3 × 8 each | Y · T · W positions, face down, 45s rest |
-| Lying Leg Raises | 3 × 10 reps | Legs straight, lower slowly, back flat, 45s rest |
-| Crunches | 3 × 15 reps | Hands behind ears, lift shoulders only, 45s rest |
+| Prone YTW | 3 × 8 each | Y · T · W positions, face down, 30s rest |
+| Heel Taps | 3 × 15 reps | Knees bent 90°, alternate heel to floor, lower back flat, 45s rest |
+| Crunches | 3 × 15 reps | Arms crossed on chest, exhale as you lift, shoulders only, 45s rest |
 
-> 💡 Push-Ups 3×10 (knee if needed), Plank 3×20s, Bird-Dog 3×20s each side, YTW 3×8, Leg Raises 3×10, Crunches 3×15. For crunches — lift shoulders only. For leg raises — lower back flat throughout.
+> 💡 Push-Ups 3×10 (knee if needed), Plank 3×20s, Bird-Dog 3×20s each side, YTW 3×8, Heel Taps 3×15, Crunches 3×15. Heel taps — knees bent 90°, lower back flat. Crunches — arms crossed on chest, exhale as you lift.
 
 ---
 
@@ -74,14 +74,14 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | Hollow Body Hold | 1 × 60s | Ribs locked to pelvis, core tight |
 | Bear Crawl Hold | 1 × 60s | Knees hover 2cm off floor, hold still |
 | Horse Stance | 1 × 60s | Feet wide, sink hips, chest tall |
-| Shaolin Wall Push | 6 × 20s | Max effort push, 10s rest between sets |
+| Shaolin Wall Push | 6 × 10s | Max effort push, 10s rest between sets |
 | Bottom Push-Up Hold | 3 × 10s | Max effort, squeeze hard at bottom, 30s rest |
 | Wall Sit | 1 × 60s | Back flat, thighs parallel |
 | Deep Squat Hold | 1 × 60s | Go shallow, hold wall if needed |
 | Bow Stance — Right | 3 × 30s | Right foot forward, 20s rest |
 | Bow Stance — Left | 3 × 30s | Left foot forward, 20s rest |
 
-> 💡 All static holds today. Hollow Body 60s, Bear Crawl 60s, Horse Stance 60s, Wall Push 6×20s, Push-Up Hold 3×10s, Wall Sit 60s, Deep Squat 60s (go shallow), Bow Stance 3×30s each side. Focus on stillness and breathing.
+> 💡 All static holds today. Hollow Body 60s, Bear Crawl 60s, Horse Stance 60s, Wall Push 6×10s, Push-Up Hold 3×10s, Wall Sit 60s, Deep Squat 60s (go shallow), Bow Stance 3×30s each side. Focus on stillness and breathing.
 
 ---
 
@@ -116,7 +116,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | Shoulders | Push-Up Hold, Plank | Puppy Pose | Wall Push |
 | Upper Back | Prone YTW, Bird-Dog | Superman Hold, Puppy Pose | — |
 | Lower Back | Bird-Dog, Plank | Cat-Cow, Superman | — |
-| Core | Plank, Bird-Dog, Leg Raises, Crunches | Dead Bug, Cat-Cow | Hollow Body, Bear Crawl |
+| Core | Plank, Bird-Dog, Heel Taps, Crunches | Dead Bug, Cat-Cow | Hollow Body, Bear Crawl |
 | Glutes | Bow Stance, Deep Squat | Clamshells, 90/90 | Horse Stance |
 | Quads | — | — | Horse Stance, Wall Sit, Deep Squat, Bow Stance |
 | Hamstrings | — | — | Wall Sit |
