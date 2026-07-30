@@ -39,15 +39,15 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 | Exercise | Sets × Reps | Notes |
 |---|---|---|
-| Push-Ups | 3 × 10 reps | Knee push-ups if needed, full range, 60s rest |
-| Plank Hold | 3 × 20s | Spine neutral, breathe steadily, 45s rest |
-| Bird-Dog Hold — Right | 3 × 20s | Right arm + left leg, hold still, 20s rest |
-| Bird-Dog Hold — Left | 3 × 20s | Left arm + right leg, hold still, 20s rest |
+| Push-Ups | 3 × 10 reps | Pelvic tilt before each set, chest to floor, 60s rest |
+| Plank Hold | 3 × 20s | Pelvic tilt + glute squeeze first, then hold, 45s rest |
+| Bird-Dog Hold — Right | 3 × 20s | Pelvic tilt first, right arm + left leg, hold still, 20s rest |
+| Bird-Dog Hold — Left | 3 × 20s | Pelvic tilt first, left arm + right leg, hold still, 20s rest |
 | Prone YTW | 3 × 8 each | Y · T · W positions, face down, 30s rest |
-| Heel Taps | 3 × 15 reps | Knees bent 90°, alternate heel to floor, lower back flat, 45s rest |
-| Crunches | 3 × 15 reps | Arms crossed on chest, exhale as you lift, shoulders only, 45s rest |
+| Heel Taps | 3 × 15 reps | Pelvic tilt first, knees bent 90°, alternate heel to floor, 45s rest |
+| Crunches | 3 × 15 reps | Pelvic tilt first, arms crossed on chest, exhale as you lift, 45s rest |
 
-> 💡 Push-Ups 3×10 (knee if needed), Plank 3×20s, Bird-Dog 3×20s each side, YTW 3×8, Heel Taps 3×15, Crunches 3×15. Heel taps — knees bent 90°, lower back flat. Crunches — arms crossed on chest, exhale as you lift.
+> 💡 🔑 Start EVERY exercise with a posterior pelvic tilt — tuck pelvis under, squeeze glutes, press lower back flat. This is the master switch that activates your entire core. Reset between every set.
 
 ---
 
@@ -57,7 +57,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 |---|---|---|
 | Cat-Cow Stretch | 2 × 10 reps | Slow and controlled, 30s rest |
 | 90/90 Hip Hold | 2 × 45s each side | Both legs at 90°, sit tall, 30s rest |
-| Dead Bug | 3 × 8 each side | Spine flat, slow, 45s rest |
+| Dead Bug | 3 × 8 each side | Pelvic tilt first, lower back flat throughout, 45s rest |
 | Superman Hold | 3 × 10 reps | Hold briefly at top, 45s rest |
 | Puppy Pose | 2 × 45s | Hips high, arms forward, chest low, 30s rest |
 | Clamshells — Left | 3 × 12 | Lie on right side, 30s rest |
@@ -134,9 +134,15 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 | File | Description |
 |---|---|
-| `workout-plan.html` | Main interactive workout app with timers, sound cues and full session flow |
+| `index.html` | Main interactive workout app with timers, sound cues and full session flow |
 | `body-analysis.html` | Interactive body part analysis with day filters |
 | `README.md` | This file |
+
+---
+
+## 🔑 Key Form Discovery
+
+**Posterior Pelvic Tilt is the master switch.** Tuck pelvis under + squeeze glutes + press lower back flat BEFORE every set. This single cue activates the entire core and makes Plank, Push-Ups, Bird-Dog, Dead Bug, Heel Taps and Crunches all work correctly. Without it — shoulders take the load in plank, neck compensates in crunches, hip flexors dominate in heel taps.
 
 ---
 
@@ -151,7 +157,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 
 ## 📱 How to Use
 
-1. Open `workout-plan.html` in **Chrome** on your phone
+1. Open `index.html` in **Chrome** on your phone
 2. Tap **▶ Start** on the day you want
 3. Follow the timer — warm-up flows into main workout flows into cool-down automatically
 4. Use **⏸ Pause** anytime you need a break
