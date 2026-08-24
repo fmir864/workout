@@ -4,6 +4,7 @@
 
 [![View Interactive App](https://img.shields.io/badge/Open_Workout_App-4ade80?style=for-the-badge&logo=html5&logoColor=black)](https://fmir864.github.io/workout/index.html)
 [![Body Part Analysis](https://img.shields.io/badge/Body_Part_Analysis-60a5fa?style=for-the-badge&logo=github&logoColor=black)](https://fmir864.github.io/workout/body-analysis.html)
+[![Quick Fire Sessions](https://img.shields.io/badge/Quick_Fire_Sessions-f472b6?style=for-the-badge&logo=html5&logoColor=black)](https://fmir864.github.io/workout/quickfire.html)
 
 ---
 
@@ -135,6 +136,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | File | Description |
 |---|---|
 | `index.html` | Main interactive workout app with timers, sound cues and full session flow |
+| `quickfire.html` | Optional quick fire sessions for rest days — Core, Chest, Legs |
 | `body-analysis.html` | Interactive body part analysis with day filters |
 | `README.md` | This file |
 

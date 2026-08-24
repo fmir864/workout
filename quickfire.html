@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Fire Sessions</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --card: #141414;
+  --card2: #1a1a1a;
+  --core: #f472b6;
+  --chest: #60a5fa;
+  --legs: #fb923c;
+  --text: #f0f0f0;
+  --muted: #666;
+  --border: #222;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding-top: 1rem;
+}
+
+header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, var(--core), var(--chest), var(--legs));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header p { color: var(--muted); font-size: 0.82rem; margin-top: 0.3rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.back-link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: #1a1a1a;
+  color: #60a5fa;
+  border: 1px solid #60a5fa40;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+
+.sessions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 2rem auto 0;
+}
+
+.session-card {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.session-header {
+  padding: 1.1rem 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid;
+}
+
+.core .session-header  { background: linear-gradient(135deg, #2d0a1e20, #f472b615); border-color: var(--core); }
+.chest .session-header { background: linear-gradient(135deg, #03122b20, #60a5fa15); border-color: var(--chest); }
+.legs .session-header  { background: linear-gradient(135deg, #2c0e0020, #fb923c15); border-color: var(--legs); }
+
+.session-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+}
+
+.core .session-title  { color: var(--core); }
+.chest .session-title { color: var(--chest); }
+.legs .session-title  { color: var(--legs); }
+
+.session-meta { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+.session-duration { font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+
+.core .session-duration  { background: #2d0a1e; color: var(--core); }
+.chest .session-duration { background: #03122b; color: var(--chest); }
+.legs .session-duration  { background: #2c0e00; color: var(--legs); }
+
+.session-body { padding: 0.8rem; display: flex; flex-direction: column; gap: 0.5rem; }
+
+.section-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  padding: 0.3rem 0.2rem 0;
+  font-weight: 600;
+}
+
+.ex-row {
+  background: var(--card2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.9rem;
+}
+
+.ex-name { font-weight: 600; font-size: 0.88rem; }
+.ex-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+.start-btn {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.start-btn:hover { transform: scale(1.02); opacity: 0.9; }
+.core  .start-btn { background: var(--core);  color: #000; }
+.chest .start-btn { background: var(--chest); color: #000; }
+.legs  .start-btn { background: var(--legs);  color: #000; }
+
+.tip-box {
+  background: #0d0d0d;
+  border-left: 3px solid;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.76rem;
+  color: #999;
+  line-height: 1.5;
+  margin-top: 0.2rem;
+}
+
+.core  .tip-box { border-color: var(--core); }
+.chest .tip-box { border-color: var(--chest); }
+.legs  .tip-box { border-color: var(--legs); }
+.tip-box strong { color: var(--text); }
+
+/* ── WORKOUT VIEW ── */
+#workout-view {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.wv-topbar {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.wv-day-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.wv-progress-text { font-size: 0.75rem; color: var(--muted); }
+
+.progress-bar-wrap {
+  width: 100%;
+  max-width: 480px;
+  height: 4px;
+  background: #1e1e1e;
+  border-radius: 4px;
+  margin-bottom: 1.8rem;
+  overflow: hidden;
+}
+
+.progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; width: 0%; }
+
+.timer-circle-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1.4rem;
+}
+
+.timer-svg { width: 200px; height: 200px; transform: rotate(-90deg); }
+.timer-track { fill: none; stroke: #1e1e1e; stroke-width: 10; }
+.timer-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+
+.timer-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.timer-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 4rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.timer-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 2px; }
+
+.ex-info-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.ex-info-phase { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 0.3rem; }
+.ex-info-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.04em; line-height: 1.1; margin-bottom: 0.3rem; }
+.ex-info-detail { font-size: 0.78rem; color: var(--muted); }
+
+.ex-info-sets { display: flex; gap: 6px; justify-content: center; margin-top: 0.7rem; flex-wrap: wrap; }
+.set-dot { width: 10px; height: 10px; border-radius: 50%; background: #2a2a2a; border: 1px solid #333; transition: background 0.3s; }
+.set-dot.done { border-color: transparent; }
+.set-dot.active { border-color: transparent; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+.next-up-card {
+  width: 100%;
+  max-width: 480px;
+  background: #111;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.next-up-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); white-space: nowrap; }
+.next-up-name { font-size: 0.82rem; font-weight: 600; color: #ccc; }
+
+.controls { display: flex; gap: 0.8rem; align-items: center; justify-content: center; width: 100%; max-width: 480px; }
+
+.btn-pause {
+  display: flex; align-items: center; gap: 6px;
+  padding: 12px 28px; border-radius: 50px; border: 1px solid #2a2a2a;
+  background: #1e1e1e; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.btn-pause:hover { background: #272727; transform: scale(1.03); }
+
+.btn-skip {
+  padding: 12px 20px; border-radius: 50px; border: 1px solid #2a2a2a;
+  background: transparent; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: color 0.2s, transform 0.15s;
+}
+.btn-skip:hover { color: var(--text); transform: scale(1.03); }
+
+.btn-stop {
+  padding: 12px 20px; border-radius: 50px; border: 1px solid #3a1a1a;
+  background: transparent; color: #f87171;
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.btn-stop:hover { background: #1a0a0a; transform: scale(1.03); }
+
+/* Complete */
+#complete-view {
+  display: none; min-height: 100vh;
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 2rem; text-align: center;
+}
+
+.complete-emoji { font-size: 3.5rem; margin-bottom: 1rem; animation: bounce 0.6s ease; }
+@keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+.complete-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 7vw, 3.5rem); letter-spacing: 0.04em; margin-bottom: 0.5rem; }
+.complete-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 2rem; line-height: 1.6; }
+.btn-back { padding: 12px 32px; border-radius: 50px; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
+.btn-back:hover { transform: scale(1.05); }
+
+/* Pause overlay */
+#pause-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88); backdrop-filter: blur(6px);
+  z-index: 100; align-items: center; justify-content: center;
+  flex-direction: column; gap: 1.2rem; text-align: center;
+}
+.pause-title { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.05em; }
+.pause-sub { color: var(--muted); font-size: 0.85rem; }
+.btn-resume { padding: 14px 40px; border-radius: 50px; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
+.btn-resume:hover { transform: scale(1.05); }
+
+footer { text-align: center; color: var(--muted); font-size: 0.7rem; margin-top: 2rem; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<!-- ═══ PLAN VIEW ═══ -->
+<div id="plan-view">
+  <header>
+    <h1>Quick Fire</h1>
+    <p>Optional · Rest Days · Targeted Sessions</p>
+    <a href="index.html" class="back-link">← Back to Main Plan</a>
+  </header>
+
+  <div class="sessions-grid">
+
+    <!-- CORE -->
+    <div class="session-card core">
+      <div class="session-header">
+        <div>
+          <div class="session-title">Core</div>
+          <div class="session-meta">Abs & Stability</div>
+        </div>
+        <div class="session-duration">~18 min</div>
+      </div>
+      <div class="session-body">
+
+        <div class="section-label">🔥 Warm-Up</div>
+        <div class="ex-row"><div class="ex-name">Trunk Twist</div><div class="ex-meta">30s · arms out, rotate gently</div></div>
+        <div class="ex-row"><div class="ex-name">Knee Hugs</div><div class="ex-meta">30s · alternate legs, lift knee to chest</div></div>
+        <div class="ex-row"><div class="ex-name">Cat-Cow Stretch</div><div class="ex-meta">1 × 10 reps · slow spinal mobilisation</div></div>
+
+        <div class="section-label">💪 Main</div>
+        <div class="ex-row"><div class="ex-name">Plank Hold</div><div class="ex-meta">3 × 20s · pelvic tilt first · 30s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Dead Bug</div><div class="ex-meta">3 × 8 each side · pelvic tilt · 40s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Heel Taps</div><div class="ex-meta">3 × 15 reps · pelvic tilt · 30s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Crunches</div><div class="ex-meta">3 × 15 reps · arms crossed · exhale up · 30s rest</div></div>
+
+        <div class="section-label">🧘 Cool-Down</div>
+        <div class="ex-row"><div class="ex-name">Childs Pose</div><div class="ex-meta">45s · arms forward, breathe deeply</div></div>
+        <div class="ex-row"><div class="ex-name">Knees-to-Chest</div><div class="ex-meta">30s · lower back flat, hug both knees</div></div>
+        <div class="ex-row"><div class="ex-name">Spinal Twist — Left</div><div class="ex-meta">30s · drop left knee across, shoulders flat</div></div>
+        <div class="ex-row"><div class="ex-name">Spinal Twist — Right</div><div class="ex-meta">30s · drop right knee across, shoulders flat</div></div>
+        <div class="ex-row"><div class="ex-name">Seated Fold</div><div class="ex-meta">30s · legs straight, reach toward feet</div></div>
+
+        <button class="start-btn" onclick="startSession('core')">▶ Start Core Session</button>
+        <div class="tip-box"><strong>Key:</strong> 🔑 Posterior pelvic tilt before every exercise. If you feel it in your neck or hip flexors — reset the tilt.</div>
+      </div>
+    </div>
+
+    <!-- CHEST -->
+    <div class="session-card chest">
+      <div class="session-header">
+        <div>
+          <div class="session-title">Chest</div>
+          <div class="session-meta">Push & Strength</div>
+        </div>
+        <div class="session-duration">~16 min</div>
+      </div>
+      <div class="session-body">
+
+        <div class="section-label">🔥 Warm-Up</div>
+        <div class="ex-row"><div class="ex-name">Arm Circles</div><div class="ex-meta">30s · forward then backward</div></div>
+        <div class="ex-row"><div class="ex-name">Arm Swings</div><div class="ex-meta">30s · across chest and out wide</div></div>
+        <div class="ex-row"><div class="ex-name">Slow Push-Up</div><div class="ex-meta">5 reps · very slow, joint primer only</div></div>
+
+        <div class="section-label">💪 Main</div>
+        <div class="ex-row"><div class="ex-name">Push-Ups</div><div class="ex-meta">3 × 10 reps · pelvic tilt · 60s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Bottom Push-Up Hold</div><div class="ex-meta">3 × 10s max effort · squeeze hard · 30s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Shaolin Wall Push</div><div class="ex-meta">6 × 10s max effort · 10s rest between</div></div>
+
+        <div class="section-label">🧘 Cool-Down</div>
+        <div class="ex-row"><div class="ex-name">Upward Salute</div><div class="ex-meta">30s · sweep arms overhead, reach tall</div></div>
+        <div class="ex-row"><div class="ex-name">Upward Dog</div><div class="ex-meta">30s · chest lift, tops of feet on floor</div></div>
+        <div class="ex-row"><div class="ex-name">Childs Pose</div><div class="ex-meta">45s · arms forward, decompress shoulders</div></div>
+        <div class="ex-row"><div class="ex-name">Puppy Pose</div><div class="ex-meta">45s · hips high, arms forward, chest low</div></div>
+
+        <button class="start-btn" onclick="startSession('chest')">▶ Start Chest Session</button>
+        <div class="tip-box"><strong>Key:</strong> Full range on push-ups — chest touches floor. Wall Push and Hold are max effort — press like the wall will move.</div>
+      </div>
+    </div>
+
+    <!-- LEGS -->
+    <div class="session-card legs">
+      <div class="session-header">
+        <div>
+          <div class="session-title">Legs</div>
+          <div class="session-meta">Lower Body & Hips</div>
+        </div>
+        <div class="session-duration">~17 min</div>
+      </div>
+      <div class="session-body">
+
+        <div class="section-label">🔥 Warm-Up</div>
+        <div class="ex-row"><div class="ex-name">March in Place</div><div class="ex-meta">30s · lift knees, get blood flowing</div></div>
+        <div class="ex-row"><div class="ex-name">Leg Swings</div><div class="ex-meta">30s · hold wall, front to back each leg</div></div>
+        <div class="ex-row"><div class="ex-name">Ankle Circles</div><div class="ex-meta">30s · each foot, both directions</div></div>
+        <div class="ex-row"><div class="ex-name">90/90 Hip Hold</div><div class="ex-meta">30s each side · hip mobiliser</div></div>
+
+        <div class="section-label">💪 Main</div>
+        <div class="ex-row"><div class="ex-name">Horse Stance</div><div class="ex-meta">1 × 60s · feet wide, sink hips, chest tall</div></div>
+        <div class="ex-row"><div class="ex-name">Wall Sit</div><div class="ex-meta">1 × 60s · back flat, thighs parallel</div></div>
+        <div class="ex-row"><div class="ex-name">Bow Stance — Right</div><div class="ex-meta">3 × 30s · right foot forward · 20s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Bow Stance — Left</div><div class="ex-meta">3 × 30s · left foot forward · 20s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Clamshells — Left</div><div class="ex-meta">3 × 12 · lie on right side · 20s rest</div></div>
+        <div class="ex-row"><div class="ex-name">Clamshells — Right</div><div class="ex-meta">3 × 12 · lie on left side · 30s rest</div></div>
+
+        <div class="section-label">🧘 Cool-Down</div>
+        <div class="ex-row"><div class="ex-name">Low Dragon — Left</div><div class="ex-meta">30s · left foot forward, sink hips gently</div></div>
+        <div class="ex-row"><div class="ex-name">Low Dragon — Right</div><div class="ex-meta">30s · right foot forward, sink hips gently</div></div>
+        <div class="ex-row"><div class="ex-name">Lying Figure Four — Left</div><div class="ex-meta">30s · left ankle over right thigh</div></div>
+        <div class="ex-row"><div class="ex-name">Lying Figure Four — Right</div><div class="ex-meta">30s · right ankle over left thigh</div></div>
+        <div class="ex-row"><div class="ex-name">Reclined Butterfly</div><div class="ex-meta">30s · soles together, knees fall out</div></div>
+        <div class="ex-row"><div class="ex-name">Quad Stretch — Left</div><div class="ex-meta">30s · left heel to glute</div></div>
+        <div class="ex-row"><div class="ex-name">Quad Stretch — Right</div><div class="ex-meta">30s · right heel to glute</div></div>
+
+        <button class="start-btn" onclick="startSession('legs')">▶ Start Legs Session</button>
+        <div class="tip-box"><strong>Key:</strong> Extra 15s on left side for 90/90 and Low Dragon — your left hip needs more work. Never force range, let gravity open it.</div>
+      </div>
+    </div>
+
+  </div>
+  <footer>Optional sessions for Tue · Thu · Sat &nbsp;|&nbsp; Do not replace Mon · Wed · Fri</footer>
+</div>
+
+<!-- ═══ WORKOUT VIEW ═══ -->
+<div id="workout-view">
+  <div class="wv-topbar">
+    <div class="wv-day-label" id="wv-label">Core</div>
+    <div class="wv-progress-text" id="wv-progress">Exercise 1 of 7</div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+
+  <div class="timer-circle-wrap">
+    <svg class="timer-svg" viewBox="0 0 200 200">
+      <circle class="timer-track" cx="100" cy="100" r="86"/>
+      <circle class="timer-fill" id="timer-ring" cx="100" cy="100" r="86" stroke-dasharray="540" stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-center">
+      <div class="timer-number" id="timer-num">30</div>
+      <div class="timer-label" id="timer-lbl">GO!</div>
+    </div>
+  </div>
+
+  <div class="ex-info-card">
+    <div class="ex-info-phase" id="ex-phase">WARM-UP</div>
+    <div class="ex-info-name" id="ex-name">Trunk Twist</div>
+    <div class="ex-info-detail" id="ex-detail">30s · arms out, rotate gently</div>
+    <div class="ex-info-sets" id="ex-sets"></div>
+  </div>
+
+  <div class="next-up-card" id="next-card">
+    <div class="next-up-label">Up next →</div>
+    <div class="next-up-name" id="next-name">Knee Hugs</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-stop" onclick="stopSession()">✕ Stop</button>
+    <button class="btn-pause" id="btn-pause" onclick="togglePause()">⏸ Pause</button>
+    <button class="btn-skip" onclick="skipStep()">Skip ›</button>
+  </div>
+</div>
+
+<!-- ═══ COMPLETE VIEW ═══ -->
+<div id="complete-view">
+  <div class="complete-emoji">🏆</div>
+  <div class="complete-title" id="complete-title">Session Done!</div>
+  <div class="complete-sub" id="complete-sub">Great work. Rest and recover.</div>
+  <button class="btn-back" id="btn-back" onclick="backToPlan()">← Back</button>
+</div>
+
+<!-- ═══ PAUSE OVERLAY ═══ -->
+<div id="pause-overlay">
+  <div class="pause-title">PAUSED</div>
+  <div class="pause-sub">Take your time.</div>
+  <button class="btn-resume" onclick="togglePause()">▶ Resume</button>
+</div>
+
+<script>
+const CIRC = 2 * Math.PI * 86;
+
+// ── SESSION DATA ──
+const SESSIONS = {
+  core: {
+    label: 'Core',
+    color: '#f472b6',
+    exercises: [
+      { name: 'Trunk Twist',          phase: 'warmup', sets: 1, reps: 'Arms out, rotate gently',              workTime: 30, restTime: 8  },
+      { name: 'Knee Hugs',            phase: 'warmup', sets: 1, reps: 'Alternate legs, lift knee to chest',   workTime: 30, restTime: 8  },
+      { name: 'Cat-Cow Stretch',      phase: 'warmup', sets: 1, reps: '10 reps · slow spinal mobilisation',  workTime: 30, restTime: 8  },
+      { name: 'Plank Hold',           phase: 'main',   sets: 3, reps: 'Pelvic tilt + glute squeeze first',   workTime: 20, restTime: 30 },
+      { name: 'Dead Bug',             phase: 'main',   sets: 3, reps: 'Pelvic tilt · lower back flat',       workTime: 40, restTime: 40 },
+      { name: 'Heel Taps',            phase: 'main',   sets: 3, reps: 'Pelvic tilt · knees bent 90°',        workTime: 40, restTime: 30 },
+      { name: 'Crunches',             phase: 'main',   sets: 3, reps: 'Pelvic tilt · arms crossed · exhale', workTime: 40, restTime: 30 },
+      { name: 'Childs Pose',          phase: 'cooldown', sets: 1, reps: 'Arms forward, breathe deeply',      workTime: 45, restTime: 10 },
+      { name: 'Knees-to-Chest',       phase: 'cooldown', sets: 1, reps: 'Lower back flat, hug both knees',  workTime: 30, restTime: 10 },
+      { name: 'Spinal Twist — Left',  phase: 'cooldown', sets: 1, reps: 'Drop left knee, shoulders flat',   workTime: 30, restTime: 10 },
+      { name: 'Spinal Twist — Right', phase: 'cooldown', sets: 1, reps: 'Drop right knee, shoulders flat',  workTime: 30, restTime: 10 },
+      { name: 'Seated Fold',          phase: 'cooldown', sets: 1, reps: 'Legs straight, reach toward feet', workTime: 30, restTime: 0  },
+    ]
+  },
+  chest: {
+    label: 'Chest',
+    color: '#60a5fa',
+    exercises: [
+      { name: 'Arm Circles',          phase: 'warmup',   sets: 1, reps: 'Forward then backward',              workTime: 30, restTime: 8  },
+      { name: 'Arm Swings',           phase: 'warmup',   sets: 1, reps: 'Across chest and out wide',          workTime: 30, restTime: 8  },
+      { name: 'Slow Push-Up',         phase: 'warmup',   sets: 1, reps: '5 reps · very slow, joint primer',   workTime: 30, restTime: 8  },
+      { name: 'Push-Ups',             phase: 'main',     sets: 3, reps: 'Pelvic tilt · chest to floor',       workTime: 40, restTime: 60 },
+      { name: 'Bottom Push-Up Hold',  phase: 'main',     sets: 3, reps: 'Max effort · squeeze hard',          workTime: 10, restTime: 30 },
+      { name: 'Shaolin Wall Push',    phase: 'main',     sets: 6, reps: 'Max effort push',                    workTime: 10, restTime: 10 },
+      { name: 'Upward Salute',        phase: 'cooldown', sets: 1, reps: 'Sweep arms up, reach tall',          workTime: 30, restTime: 10 },
+      { name: 'Upward Dog',           phase: 'cooldown', sets: 1, reps: 'Chest lift, tops of feet on floor',  workTime: 30, restTime: 10 },
+      { name: 'Childs Pose',          phase: 'cooldown', sets: 1, reps: 'Arms forward, decompress shoulders', workTime: 45, restTime: 10 },
+      { name: 'Puppy Pose',           phase: 'cooldown', sets: 1, reps: 'Hips high, arms forward, chest low', workTime: 45, restTime: 0  },
+    ]
+  },
+  legs: {
+    label: 'Legs',
+    color: '#fb923c',
+    exercises: [
+      { name: 'March in Place',           phase: 'warmup',   sets: 1, reps: 'Lift knees, get blood flowing',     workTime: 30, restTime: 8  },
+      { name: 'Leg Swings',               phase: 'warmup',   sets: 1, reps: 'Hold wall, front to back each leg', workTime: 30, restTime: 8  },
+      { name: 'Ankle Circles',            phase: 'warmup',   sets: 1, reps: 'Each foot, both directions',        workTime: 30, restTime: 8  },
+      { name: '90/90 Hip Hold',           phase: 'warmup',   sets: 1, reps: '30s each side · hip mobiliser',     workTime: 30, restTime: 8  },
+      { name: 'Horse Stance',             phase: 'main',     sets: 1, reps: 'Feet wide, sink hips, chest tall',  workTime: 60, restTime: 20 },
+      { name: 'Wall Sit',                 phase: 'main',     sets: 1, reps: 'Back flat, thighs parallel',        workTime: 60, restTime: 20 },
+      { name: 'Bow Stance — Right',       phase: 'main',     sets: 3, reps: 'Right foot forward, sink gently',   workTime: 30, restTime: 20 },
+      { name: 'Bow Stance — Left',        phase: 'main',     sets: 3, reps: 'Left foot forward, sink gently',    workTime: 30, restTime: 20 },
+      { name: 'Clamshells — Left',        phase: 'main',     sets: 3, reps: 'Lie on right side',                 workTime: 40, restTime: 20 },
+      { name: 'Clamshells — Right',       phase: 'main',     sets: 3, reps: 'Lie on left side',                  workTime: 40, restTime: 30 },
+      { name: 'Low Dragon — Left',        phase: 'cooldown', sets: 1, reps: 'Left foot forward, sink hips',      workTime: 30, restTime: 10 },
+      { name: 'Low Dragon — Right',       phase: 'cooldown', sets: 1, reps: 'Right foot forward, sink hips',     workTime: 30, restTime: 10 },
+      { name: 'Lying Figure Four — Left', phase: 'cooldown', sets: 1, reps: 'Left ankle over right thigh',       workTime: 30, restTime: 10 },
+      { name: 'Lying Figure Four — Right',phase: 'cooldown', sets: 1, reps: 'Right ankle over left thigh',       workTime: 30, restTime: 10 },
+      { name: 'Reclined Butterfly',       phase: 'cooldown', sets: 1, reps: 'Soles together, knees fall out',    workTime: 30, restTime: 10 },
+      { name: 'Quad Stretch — Left',      phase: 'cooldown', sets: 1, reps: 'Left heel to glute',                workTime: 30, restTime: 10 },
+      { name: 'Quad Stretch — Right',     phase: 'cooldown', sets: 1, reps: 'Right heel to glute',               workTime: 30, restTime: 0  },
+    ]
+  }
+};
+
+// ── STATE ──
+let currentSession = null;
+let exercises = [];
+let exIndex = 0;
+let currentSet = 0;
+let isResting = false;
+let timeLeft = 0;
+let isPaused = false;
+let timerInterval = null;
+let elapsedTime = 0;
+let totalDuration = 0;
+let wakeLock = null;
+
+// ── AUDIO ──
+let audioCtx = null;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+function beep(freq, dur, vol=0.4, type='sine') {
+  try {
+    const ctx = getAudio(), osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+function soundGo()       { beep(660, 0.12, 0.4); setTimeout(() => beep(880, 0.2, 0.5), 130); }
+function soundRest()     { beep(440, 0.15, 0.35); setTimeout(() => beep(330, 0.25, 0.3), 150); }
+function soundTick()     { beep(540, 0.08, 0.25, 'square'); }
+function soundDone()     { beep(523, 0.3, 0.4); setTimeout(() => beep(659, 0.3, 0.4), 200); setTimeout(() => beep(784, 0.5, 0.5), 400); }
+
+// ── WAKE LOCK ──
+async function requestWakeLock() {
+  try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+}
+async function releaseWakeLock() {
+  try { if (wakeLock) { await wakeLock.release(); wakeLock = null; } } catch(e) {}
+}
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') await requestWakeLock();
+});
+
+// ── START ──
+function startSession(key) {
+  currentSession = key;
+  const s = SESSIONS[key];
+  exercises = s.exercises;
+  exIndex = 0; currentSet = 0; isResting = false; isPaused = false; elapsedTime = 0;
+  totalDuration = exercises.reduce((a, ex) => a + ex.sets * ex.workTime + (ex.sets - 1) * ex.restTime, 0);
+  document.getElementById('wv-label').textContent = s.label;
+  document.getElementById('wv-label').style.color = s.color;
+  document.getElementById('timer-ring').style.stroke = s.color;
+  document.getElementById('progress-fill').style.background = s.color;
+  document.getElementById('btn-back').style.background = s.color;
+  document.getElementById('btn-back').style.color = '#000';
+  document.getElementById('btn-resume').style.background = s.color;
+  document.getElementById('btn-resume').style.color = '#000';
+  showView('workout');
+  requestWakeLock();
+  beginStep();
+}
+
+function beginStep() {
+  isResting = false;
+  timeLeft = exercises[exIndex].workTime;
+  updateDisplay();
+  soundGo();
+  startTick();
+}
+
+function beginRest() {
+  isResting = true;
+  timeLeft = exercises[exIndex].restTime;
+  updateDisplay();
+  soundRest();
+  startTick();
+}
+
+function startTick() {
+  clearInterval(timerInterval);
+  const total = isResting ? exercises[exIndex].restTime : exercises[exIndex].workTime;
+  updateRing(timeLeft, total);
+  timerInterval = setInterval(() => {
+    if (isPaused) return;
+    timeLeft--; elapsedTime++;
+    updateRing(timeLeft, total);
+    document.getElementById('timer-num').textContent = timeLeft;
+    if (timeLeft <= 3 && timeLeft > 0) soundTick();
+    if (timeLeft <= 0) { clearInterval(timerInterval); onStepComplete(); }
+  }, 1000);
+}
+
+function onStepComplete() {
+  const ex = exercises[exIndex];
+  if (!isResting) {
+    currentSet++;
+    if (currentSet < ex.sets) { beginRest(); }
+    else {
+      exIndex++; currentSet = 0;
+      if (exIndex < exercises.length) { ex.restTime > 0 ? beginRest() : beginStep(); }
+      else { finishSession(); }
+    }
+  } else { beginStep(); }
+  updateDisplay();
+}
+
+function updateDisplay() {
+  if (exIndex >= exercises.length) return;
+  const ex = exercises[exIndex];
+  const s = SESSIONS[currentSession];
+  const phase = ex.phase;
+
+  let phaseLabel, timerLabel, color;
+  if (isResting) { phaseLabel = '💤 REST'; timerLabel = 'REST'; color = '#555'; }
+  else if (phase === 'warmup') { phaseLabel = '🔥 WARM-UP'; timerLabel = 'GO!'; color = '#facc15'; }
+  else if (phase === 'cooldown') { phaseLabel = '🧘 COOL-DOWN'; timerLabel = 'HOLD'; color = '#a78bfa'; }
+  else { phaseLabel = '💪 EXERCISE'; timerLabel = 'GO!'; color = s.color; }
+
+  document.getElementById('ex-phase').textContent = phaseLabel;
+  document.getElementById('timer-lbl').textContent = timerLabel;
+  document.getElementById('timer-ring').style.stroke = color;
+  document.getElementById('timer-num').textContent = timeLeft;
+  document.getElementById('ex-name').textContent = ex.name;
+  document.getElementById('ex-detail').textContent = phase === 'main' ? `Set ${currentSet + 1} of ${ex.sets} · ${ex.reps}` : ex.reps;
+
+  const dotsEl = document.getElementById('ex-sets');
+  dotsEl.innerHTML = '';
+  if (phase === 'main') {
+    for (let i = 0; i < ex.sets; i++) {
+      const d = document.createElement('div');
+      d.className = 'set-dot' + (i < currentSet ? ' done' : i === currentSet && !isResting ? ' active' : '');
+      if (i < currentSet || (i === currentSet && !isResting)) d.style.background = s.color;
+      dotsEl.appendChild(d);
+    }
+  }
+
+  const mainEx = exercises.filter(e => e.phase === 'main');
+  const mainIdx = exercises.slice(0, exIndex + 1).filter(e => e.phase === 'main').length;
+  if (phase === 'warmup') document.getElementById('wv-progress').textContent = '🔥 Warm-Up';
+  else if (phase === 'cooldown') document.getElementById('wv-progress').textContent = '🧘 Cool-Down';
+  else document.getElementById('wv-progress').textContent = `Exercise ${mainIdx} of ${mainEx.length}`;
+
+  document.getElementById('progress-fill').style.width = Math.min(100, (elapsedTime / totalDuration) * 100) + '%';
+
+  const next = exercises[exIndex + 1];
+  const nc = document.getElementById('next-card');
+  document.getElementById('next-name').textContent = next ? next.name : '🏁 All done!';
+  nc.style.display = next || phase !== 'cooldown' ? 'flex' : 'none';
+}
+
+function updateRing(cur, total) {
+  document.getElementById('timer-ring').style.strokeDashoffset = CIRC - (cur / total) * CIRC;
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  document.getElementById('pause-overlay').style.display = isPaused ? 'flex' : 'none';
+  document.getElementById('btn-pause').textContent = isPaused ? '▶ Resume' : '⏸ Pause';
+}
+
+function skipStep() { clearInterval(timerInterval); timeLeft = 0; onStepComplete(); }
+
+function stopSession() { clearInterval(timerInterval); releaseWakeLock(); isPaused = false; document.getElementById('pause-overlay').style.display = 'none'; backToPlan(); }
+
+function finishSession() {
+  clearInterval(timerInterval); releaseWakeLock(); soundDone();
+  const s = SESSIONS[currentSession];
+  document.getElementById('complete-title').textContent = s.label + ' Session Done! 💪';
+  document.getElementById('complete-sub').textContent = 'Great work. Rest and let the muscles recover.';
+  showView('complete');
+}
+
+function backToPlan() { clearInterval(timerInterval); showView('plan'); }
+function showView(v) {
+  document.getElementById('plan-view').style.display = v === 'plan' ? 'block' : 'none';
+  document.getElementById('workout-view').style.display = v === 'workout' ? 'flex' : 'none';
+  document.getElementById('complete-view').style.display = v === 'complete' ? 'flex' : 'none';
+}
+showView('plan');
+</script>
+</body>
+</html>
