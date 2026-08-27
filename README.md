@@ -41,7 +41,7 @@ Every session includes a **~6 min warm-up** and **~12 min cool-down** built in.
 | Exercise | Sets × Reps | Notes |
 |---|---|---|
 | Push-Ups | 3 × 10 reps | Pelvic tilt before each set, chest to floor, 60s rest |
-| Plank Hold | 3 × 20s | Pelvic tilt + glute squeeze first, then hold, 45s rest |
+| Plank Hold | 3 × 30s | Pelvic tilt + glute squeeze first, then hold, 45s rest |
 | Bird-Dog Hold — Right | 3 × 20s | Pelvic tilt first, right arm + left leg, hold still, 20s rest |
 | Bird-Dog Hold — Left | 3 × 20s | Pelvic tilt first, left arm + right leg, hold still, 20s rest |
 | Prone YTW | 3 × 8 each | Y · T · W positions, face down, 30s rest |
